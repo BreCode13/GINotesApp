@@ -1,18 +1,26 @@
-
-//const request = require('request')
-
 const geocode = require('./utils/geocode')
 const forecast = require('./utils/forecast')
 
-geocode('LosAngeles', (error, data) => {
-    console.log('Error', error)
-    console.log('Data', data)
-})
+const address = process.argv[2]
 
-forecast(-118.521447,33.899991, (error, data) => {
-    console.log('Error', error)
-    console.log('Data', data)
-})
+if (!address) {
+    console.log('Please provide an address')
+} else {
+    geocode(address, (error, data) => {
+        if (error) {
+            return console.log(error)
+        }
+
+        forecast(data.latitude, data.longitude, (error, forecastData) => {
+            if (error) {
+                return console.log(error)
+            }
+
+            console.log(data.location)
+            console.log(forecastData)
+        })
+    })
+}
 
 
 //Having problems with the length.  TypeError: Cannot read properties of undefined (reading 'length')
